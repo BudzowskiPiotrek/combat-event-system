@@ -1,0 +1,29 @@
+<div class="players-page-container">
+    <header>
+        <h2>Gestión de Participantes</h2>
+    </header>
+
+    <div class="content-grid">
+        <!-- Sección Izquierda: Listados -->
+        <div class="lists-column">
+            <section class="players-section">
+                <h3>Jugadores Activos</h3>
+                <app-player-list [players]="activePlayers"></app-player-list>
+            </section>
+
+            <section class="players-section inactive">
+                <h3>Jugadores Inactivos</h3>
+                <app-player-list [players]="inactivePlayers"></app-player-list>
+            </section>
+        </div>
+
+
+        <!-- Sección Derecha: Formulario -->
+        <div class="form-column">
+            <section class="form-section">
+                <h3>Crear / Editar Jugador</h3>
+                <app-player-form></app-player-form>
+            </section>
+        </div>
+    </div>
+</div>
