@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PlayersRoutingModule } from './players-routing.module';
-import { PlayersPageComponent } from './pages/players-page/players-page.component';
+import { PlayersPageComponent } from './page-player/players-page.component';
 import { PlayerListComponent } from './components/player-list/player-list.component';
 import { PlayerCardComponent } from './components/player-card/player-card.component';
 import { PlayerFormComponent } from './components/player-form/player-form.component';
