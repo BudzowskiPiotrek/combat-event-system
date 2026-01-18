@@ -1,6 +1,34 @@
-<div class="player-list">
-    <div *ngIf="players.length === 0" class="no-data">No hay jugadores</div>
-    <div *ngFor="let player of players" class="player-item">
-        {{ player.nick }}
-    </div>
+<div class="player-list-container">
+    <table class="player-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Logo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let player of players">
+                <td>{{ player.nick }}</td>
+                <td>
+                    <img [src]="player.logoUrl" [alt]="player.nick" class="player-logo-small" *ngIf="player.logoUrl">
+                    <span *ngIf="!player.logoUrl">-</span>
+                </td>
+                <td>
+                    <span class="status-badge" [class.active]="player.active">
+                        {{ player.active ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </td>
+                <td class="actions-cell">
+                    <button class="btn-icon">Editar</button>
+                    <button class="btn-icon btn-danger">Eliminar</button>
+                    <button class="btn-icon">{{ player.active ? 'Desactivar' : 'Activar' }}</button>
+                </td>
+            </tr>
+            <tr *ngIf="players.length === 0">
+                <td colspan="4" class="no-data">No hay jugadores</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
