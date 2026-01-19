@@ -1,0 +1,22 @@
+from pydantic import BaseModel
+from datetime import datetime
+from typing import Optional
+from enum import Enum
+
+class TournamentStatus(str, Enum):
+    DRAFT = "DRAFT"
+    GENERATED = "GENERATED"
+
+class TournamentBase(BaseModel):
+    name: str
+
+class TournamentCreate(TournamentBase):
+    pass
+
+class TournamentResponse(TournamentBase):
+    id: int
+    status: TournamentStatus
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
