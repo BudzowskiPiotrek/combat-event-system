@@ -39,7 +39,7 @@ export class TournamentDetailPageComponent implements OnInit {
         });
     }
 
-    private loadParticipants(id: number): void {
+    loadParticipants(id: number): void {
         this.tournamentsService.getParticipants(id).subscribe({
             next: (data) => {
                 this.participants = data;

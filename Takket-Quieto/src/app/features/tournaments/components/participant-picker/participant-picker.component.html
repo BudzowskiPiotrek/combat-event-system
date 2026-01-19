@@ -1,0 +1,25 @@
+<div class="picker-container">
+    <h3>Añadir Participantes</h3>
+
+    <div *ngIf="loading" class="info-msg">Cargando jugadores disponibles...</div>
+
+    <div *ngIf="!loading && availablePlayers.length === 0" class="info-msg">
+        No hay jugadores activos disponibles.
+    </div>
+
+    <div *ngIf="!loading && availablePlayers.length > 0" class="players-list">
+        <div *ngFor="let player of availablePlayers" class="player-item">
+            <label *ngIf="player.id">
+                <input type="checkbox" [checked]="selectedPlayerIds.has(player.id)"
+                    (change)="onToggleSelection(player.id)">
+                {{ player.nick }}
+            </label>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button (click)="onSave()" [disabled]="selectedPlayerIds.size === 0 || saving" class="btn-primary">
+            {{ saving ? 'Guardando...' : 'Guardar Participantes' }}
+        </button>
+    </div>
+</div>

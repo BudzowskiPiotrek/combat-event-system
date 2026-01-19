@@ -46,4 +46,14 @@ export class TournamentsService {
         const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.tournaments}/${id}/participants`;
         return this.http.get<Player[]>(url);
     }
+
+    /**
+     * Añade un participante al torneo.
+     * @param tournamentId ID del torneo
+     * @param playerId ID del jugador
+     */
+    addParticipant(tournamentId: number, playerId: number): Observable<Player> {
+        const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.tournaments}/${tournamentId}/participants`;
+        return this.http.post<Player>(url, { player_id: playerId });
+    }
 }
