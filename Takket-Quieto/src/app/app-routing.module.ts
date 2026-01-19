@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
     { path: '', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) },
     { path: 'players', loadChildren: () => import('./features/players/players.module').then(m => m.PlayersModule) },
+    { path: 'tournaments', loadChildren: () => import('./features/tournaments/tournaments.module').then(m => m.TournamentsModule) },
     { path: '**', redirectTo: '' }
 ];
 
