@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .core.db import engine, Base
+from .models.tournament_player import TournamentPlayer
 from .routers import players_router, tournaments_router
 
 # Crear tablas en BD (solo para desarrollo inicial, luego usar migraciones)

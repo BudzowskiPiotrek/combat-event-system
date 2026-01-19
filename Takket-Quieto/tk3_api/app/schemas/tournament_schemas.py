@@ -20,3 +20,6 @@ class TournamentResponse(TournamentBase):
 
     class Config:
         from_attributes = True
+
+class ParticipantCreate(BaseModel):
+    player_id: int
