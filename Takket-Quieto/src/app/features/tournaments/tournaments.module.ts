@@ -5,11 +5,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TournamentsRoutingModule } from './tournaments-routing.module';
 import { TournamentsPageComponent } from './page-tournaments/tournaments-page.component';
 import { TournamentFormComponent } from './components/tournament-form/tournament-form.component';
+import { TournamentDetailPageComponent } from './page-tournament-detail/tournament-detail-page.component';
 
 @NgModule({
     declarations: [
         TournamentsPageComponent,
-        TournamentFormComponent
+        TournamentFormComponent,
+        TournamentDetailPageComponent
     ],
     imports: [
         CommonModule,
