@@ -2,9 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TournamentsRoutingModule } from './tournaments-routing.module';
+import { TournamentsPageComponent } from './page-tournaments/tournaments-page.component';
 
 @NgModule({
-    declarations: [],
+    declarations: [
+        TournamentsPageComponent
+    ],
     imports: [
         CommonModule,
         TournamentsRoutingModule

@@ -1,16 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TournamentsPageComponent } from './page-tournaments/tournaments-page.component';
 
-// Los componentes se añadirán en el siguiente paso.
 const routes: Routes = [
-    {
-        path: '',
-        children: [
-            { path: '', redirectTo: 'list', pathMatch: 'full' },
-            // { path: 'list', component: TournamentsListComponent },
-            // { path: ':id', component: TournamentDetailComponent }
-        ]
-    }
+    { path: '', component: TournamentsPageComponent },
+    { path: ':id', component: TournamentsPageComponent } // Placeholder for detail
 ];
 
 @NgModule({
