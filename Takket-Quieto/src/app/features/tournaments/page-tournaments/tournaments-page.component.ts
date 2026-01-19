@@ -32,8 +32,7 @@ export class TournamentsPageComponent implements OnInit {
     }
 
     onNewTournament(): void {
-        // En un futuro sprint se implementará el formulario de creación.
-        console.log('Navegar a creación de torneo');
+        this.router.navigate(['/tournaments/new']);
     }
 
     onViewDetails(id: number): void {
