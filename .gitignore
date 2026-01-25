@@ -2,6 +2,5 @@
 /Takket-Quieto/dist/
 /Takket-Quieto/.angular/
 
-# Opcional: Ignorar archivos de sistema
 .DS_Store
 Thumbs.db
