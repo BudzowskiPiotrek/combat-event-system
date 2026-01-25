@@ -1,0 +1,19 @@
+<div class="players-page-container">
+    <div class="page-header">
+        <h1>Jugadores</h1>
+        <button class="btn btn-primary" (click)="onNewPlayer()">Agregar Jugador</button>
+    </div>
+
+    <div class="filter-bar">
+        <button class="btn btn-outline" [class.active]="filterType === 'all'" (click)="setFilter('all')">Todos</button>
+        <button class="btn btn-outline" [class.active]="filterType === 'active'"
+            (click)="setFilter('active')">Activos</button>
+        <button class="btn btn-outline" [class.active]="filterType === 'inactive'"
+            (click)="setFilter('inactive')">Inactivos</button>
+    </div>
+
+    <div class="players-content">
+        <app-player-list [players]="displayedPlayers" (edit)="onEditPlayer($event)" (toggle)="onTogglePlayer($event)">
+        </app-player-list>
+    </div>
+</div>

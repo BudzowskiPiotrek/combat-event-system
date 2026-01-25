@@ -1,0 +1,51 @@
+.picker-container {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+.players-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    padding: 10px;
+    background: white;
+}
+
+.player-item {
+    padding: 5px 0;
+}
+
+.player-item label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.info-msg {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-primary {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

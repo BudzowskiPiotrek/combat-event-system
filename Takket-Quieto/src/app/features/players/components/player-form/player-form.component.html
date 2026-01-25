@@ -1,0 +1,33 @@
+<div class="form-container">
+    <h2>{{ isEditMode ? 'Editar Jugador' : 'Nuevo Jugador' }}</h2>
+
+    <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="nick">Nick del Jugador</label>
+            <input type="text" id="nick" formControlName="nick" placeholder="Ej: PlayerOne"
+                [class.invalid]="playerForm.get('nick')?.invalid && playerForm.get('nick')?.touched">
+            <div class="error-msg" *ngIf="playerForm.get('nick')?.invalid && playerForm.get('nick')?.touched">
+                El nick es obligatorio (mínimo 3 caracteres).
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="logoUrl">URL del Logo (Opcional)</label>
+            <input type="text" id="logoUrl" formControlName="logoUrl" placeholder="Ej: https://example.com/logo.png">
+        </div>
+
+        <div class="form-group checkbox-group">
+            <label>
+                <input type="checkbox" formControlName="active">
+                &nbsp;Activo
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" (click)="onCancel()" class="btn-outline">Cancelar</button>
+            <button type="submit" [disabled]="playerForm.invalid || submitting" class="btn-primary">
+                {{ submitting ? 'Guardando...' : (isEditMode ? 'Guardar Cambios' : 'Crear Jugador') }}
+            </button>
+        </div>
+    </form>
+</div>
