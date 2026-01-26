@@ -4,8 +4,10 @@ from ..core.db import Base
 
 class Player(Base):
     """
-    Modelo de Jugador.
-    Representa a un participante en el sistema Takket-Quieto.
+    Entidad que representa a un jugador en el sistema.
+    
+    Un jugador es un participante que puede ser inscrito en distintos
+    torneos. Se gestiona su identidad visual (logo) y su estado de disponibilidad.
     """
     __tablename__ = "player"
 

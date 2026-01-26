@@ -16,14 +16,21 @@ service = PlayersService()
 @router.get("/", response_model=List[PlayerResponse])
 def read_players(db: Session = Depends(get_db)):
     """
-    Obtener todos los jugadores.
+    Recupera el listado completo de jugadores.
+
+    :param db: Sesión de base de datos inyectada.
+    :return: Lista de jugadores (esquema PlayerResponse).
     """
     return service.get_all(db)
 
 @router.get("/{player_id}", response_model=PlayerResponse)
 def read_player(player_id: int, db: Session = Depends(get_db)):
     """
-    Obtener un jugador por su ID.
+    Obtiene los detalles de un jugador específico por ID.
+
+    :param player_id: Identificador del jugador.
+    :param db: Sesión de base de datos inyectada.
+    :return: Datos del jugador o error 404 si no existe.
     """
     player = service.get_by_id(db, player_id)
     if player is None:
@@ -33,7 +40,11 @@ def read_player(player_id: int, db: Session = Depends(get_db)):
 @router.post("/", response_model=PlayerResponse)
 def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
     """
-    Crear un nuevo jugador.
+    Registra un nuevo jugador en el sistema.
+
+    :param player: Datos para la creación del jugador.
+    :param db: Sesión de base de datos inyectada.
+    :return: El jugador creado o error 400 si la operación falla.
     """
     # En un escenario real validariamos si el nick ya existe aqui o capturariamos la excepcion de integridad
     try:
@@ -45,7 +56,12 @@ def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
 @router.put("/{player_id}", response_model=PlayerResponse)
 def update_player(player_id: int, player: PlayerUpdate, db: Session = Depends(get_db)):
     """
-    Actualizar datos de un jugador.
+    Actualiza la información de un jugador existente.
+
+    :param player_id: ID del jugador a actualizar.
+    :param player: Esquema con los nuevos datos.
+    :param db: Sesión de base de datos inyectada.
+    :return: Jugador actualizado o error 404.
     """
     updated_player = service.update_player(db, player_id, player)
     if updated_player is None:
@@ -55,7 +71,11 @@ def update_player(player_id: int, player: PlayerUpdate, db: Session = Depends(ge
 @router.patch("/{player_id}/toggle", response_model=PlayerResponse)
 def toggle_player_status(player_id: int, db: Session = Depends(get_db)):
     """
-    Cambiar el estado activo/inactivo de un jugador.
+    Activa o desactiva a un jugador mediante su identificador.
+
+    :param player_id: ID del jugador a modificar.
+    :param db: Sesión de base de datos inyectada.
+    :return: Jugador con estado toggleado o error 404.
     """
     updated_player = service.toggle_active(db, player_id)
 

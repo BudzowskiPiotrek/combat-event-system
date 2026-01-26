@@ -4,14 +4,23 @@ import enum
 from ..core.db import Base
 
 class TournamentStatus(str, enum.Enum):
+    """
+    Enumeración que define los posibles estados de un torneo.
+    
+    DRAFT: El torneo está en creación y se pueden añadir participantes.
+    GENERATED: El cuadro ha sido generado y el torneo está en curso.
+    FINISHED: El torneo ha finalizado y tiene un campeón.
+    """
     DRAFT = "DRAFT"
     GENERATED = "GENERATED"
     FINISHED = "FINISHED"
 
 class Tournament(Base):
     """
-    Modelo de Torneo.
-    Gestiona los torneos y su estado dentro del sistema.
+    Entidad que representa un torneo de eliminación directa.
+    
+    Gestiona el ciclo de vida de la competición, desde la fase de borrador
+    hasta la determinación del campeón final.
     """
     __tablename__ = "tournament"
 

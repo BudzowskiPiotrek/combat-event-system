@@ -3,8 +3,10 @@ from ..core.db import Base
 
 class TournamentPlayer(Base):
     """
-    Tabla intermedia para la relación Torneo - Jugadores.
-    Define quién participa en cada torneo.
+    Entidad asociativa que vincula jugadores con torneos.
+    
+    Permite gestionar la lista de inscritos en cada torneo, garantizando
+    mediante restricciones de unicidad que un jugador no se inscriba dos veces.
     """
     __tablename__ = "tournament_player"
 

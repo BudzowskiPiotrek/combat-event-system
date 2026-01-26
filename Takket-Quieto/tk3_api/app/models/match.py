@@ -3,13 +3,21 @@ import enum
 from ..core.db import Base
 
 class MatchStatus(str, enum.Enum):
+    """
+    Define el estado de resolución de un combate.
+    
+    PENDING: El combate aún no se ha disputado o el resultado no ha sido registrado.
+    RESOLVED: El combate ha finalizado y se ha determinado un ganador.
+    """
     PENDING = "PENDING"
     RESOLVED = "RESOLVED"
 
 class Match(Base):
     """
-    Modelo de Match (Combate).
-    Representa un enfrentamiento entre dos jugadores dentro de un torneo.
+    Entidad que representa un combate (enfrentamiento) en el sistema.
+    
+    Almacena la información de los participantes, la ronda del torneo,
+    su posición en el cuadro y el resultado final.
     """
     __tablename__ = "match"
 

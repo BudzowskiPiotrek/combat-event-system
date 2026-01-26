@@ -1,6 +1,12 @@
+"""
+Punto de entrada principal de la API Takket-Quieto.
+
+Este módulo configura la aplicación FastAPI, define el middleware de CORS,
+hace la inclusión de los routers de las distintas entidades y define
+la ruta raíz informativa.
+"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .core.db import engine, Base
 from .routers import players_router, tournaments_router, matches_router
 
 
@@ -32,4 +38,9 @@ app.include_router(matches_router.router)
 
 @app.get("/")
 def read_root():
+    """
+    Ruta raíz de la API para verificación de estado.
+
+    :return: Mensaje de bienvenida y confirmación de operatividad.
+    """
     return {"message": "Welcome to Takket-Quieto API"}

@@ -18,14 +18,21 @@ service = TournamentsService()
 @router.get("/", response_model=List[TournamentResponse])
 def read_tournaments(db: Session = Depends(get_db)):
     """
-    Obtener todos los torneos.
+    Obtiene el listado de todos los torneos registrados.
+
+    :param db: Sesión de base de datos inyectada.
+    :return: Lista de torneos disponibles.
     """
     return service.get_all(db)
 
 @router.get("/{tournament_id}", response_model=TournamentResponse)
 def read_tournament(tournament_id: int, db: Session = Depends(get_db)):
     """
-    Obtener un torneo por su ID.
+    Recupera la información detallada de un torneo por su identificador.
+
+    :param tournament_id: ID del torneo.
+    :param db: Sesión de base de datos inyectada.
+    :return: Datos del torneo o error 404 si no se encuentra.
     """
     tournament = service.get_by_id(db, tournament_id)
     if tournament is None:
@@ -35,7 +42,11 @@ def read_tournament(tournament_id: int, db: Session = Depends(get_db)):
 @router.post("/", response_model=TournamentResponse)
 def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db)):
     """
-    Crear un nuevo torneo (estado inicial DRAFT).
+    Registra un nuevo torneo en el sistema con estado inicial DRAFT.
+
+    :param tournament: Esquema con los datos del nuevo torneo.
+    :param db: Sesión de base de datos inyectada.
+    :return: El torneo creado o error 400.
     """
     try:
         return service.create_tournament(db, tournament)
@@ -45,7 +56,12 @@ def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db
 @router.post("/{tournament_id}/participants", response_model=PlayerResponse)
 def add_participant(tournament_id: int, participant: ParticipantCreate, db: Session = Depends(get_db)):
     """
-    Añadir un participante al torneo.
+    Inscribe a un jugador existente en un torneo determinado.
+
+    :param tournament_id: ID del torneo de destino.
+    :param participant: Identificador del jugador a inscribir.
+    :param db: Sesión de base de datos inyectada.
+    :return: Los datos del jugador inscrito o error 400 por validación.
     """
     try:
         return service.add_participant(db, tournament_id, participant)
@@ -55,14 +71,23 @@ def add_participant(tournament_id: int, participant: ParticipantCreate, db: Sess
 @router.get("/{tournament_id}/participants", response_model=List[PlayerResponse])
 def read_participants(tournament_id: int, db: Session = Depends(get_db)):
     """
-    Listar participantes de un torneo.
+    Obtiene el listado de todos los jugadores inscritos en un torneo específico.
+
+    :param tournament_id: ID del torneo.
+    :param db: Sesión de base de datos inyectada.
+    :return: Lista de participantes.
     """
     return service.get_participants(db, tournament_id)
 
 @router.post("/{tournament_id}/generate", response_model=List[MatchResponse])
 def generate_bracket(tournament_id: int, db: Session = Depends(get_db)):
     """
-    Generar la primera ronda del torneo.
+    Genera automáticamente el cuadro de combates (bracket) para el torneo.
+    Establece los emparejamientos de la ronda 1 y gestiona BYEs.
+
+    :param tournament_id: ID del torneo.
+    :param db: Sesión de base de datos inyectada.
+    :return: Lista de combates generados.
     """
     try:
         return service.generate_bracket(db, tournament_id)
@@ -72,7 +97,11 @@ def generate_bracket(tournament_id: int, db: Session = Depends(get_db)):
 @router.post("/{tournament_id}/next-round", response_model=List[MatchResponse])
 def generate_next_round(tournament_id: int, db: Session = Depends(get_db)):
     """
-    Generar la siguiente ronda del torneo.
+    Crea los emparejamientos para la siguiente ronda basándose en los ganadores actuales.
+
+    :param tournament_id: ID del torneo.
+    :param db: Sesión de base de datos inyectada.
+    :return: Lista de nuevos combates generados.
     """
     try:
         return service.generate_next_round(db, tournament_id)
@@ -82,6 +111,10 @@ def generate_next_round(tournament_id: int, db: Session = Depends(get_db)):
 @router.get("/{tournament_id}/bracket", response_model=List[MatchResponse])
 def read_bracket(tournament_id: int, db: Session = Depends(get_db)):
     """
-    Obtener todos los matches del torneo.
+    Recupera el cuadro completo del torneo (todos los combates de todas las rondas).
+
+    :param tournament_id: ID del torneo.
+    :param db: Sesión de base de datos inyectada.
+    :return: Listado de combates del torneo.
     """
     return service.get_bracket(db, tournament_id)

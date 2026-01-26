@@ -10,19 +10,40 @@ import random
 
 class TournamentsService:
     """
-    Servicio para gestionar la lógica de negocio de torneos.
+    Servicio encargado de la lógica de negocio de los torneos.
+    
+    Gestiona el ciclo de vida completo de las competiciones: desde la creación
+    en modo borrador, inscripción de participantes, generación del cuadro KO
+    (bracket), hasta la progresión de rondas y finalización del torneo.
     """
 
     def get_all(self, db: Session) -> List[Tournament]:
-        """Obtiene todos los torneos de la base de datos."""
+        """
+        Obtiene la lista de todos los torneos registrados.
+
+        :param db: Sesión de la base de datos.
+        :return: Lista de objetos Tournament.
+        """
         return db.query(Tournament).all()
 
     def get_by_id(self, db: Session, tournament_id: int) -> Optional[Tournament]:
-        """Busca un torneo por su ID."""
+        """
+        Recupera un torneo específico por su identificador único.
+
+        :param db: Sesión de la base de datos.
+        :param tournament_id: Identificador del torneo.
+        :return: Objeto Tournament o None si no se encuentra.
+        """
         return db.query(Tournament).filter(Tournament.id == tournament_id).first()
 
     def create_tournament(self, db: Session, tournament: TournamentCreate) -> Tournament:
-        """Crea un nuevo torneo en la base de datos con estado DRAFT."""
+        """
+        Crea un nuevo torneo con el estado inicial DRAFT.
+
+        :param db: Sesión de la base de datos.
+        :param tournament: Datos del torneo a crear.
+        :return: El torneo creado y persistido.
+        """
         db_tournament = Tournament(
             name=tournament.name,
             status=TournamentStatus.DRAFT
@@ -34,8 +55,10 @@ class TournamentsService:
 
     def add_participant(self, db: Session, tournament_id: int, participant: ParticipantCreate) -> Optional[Player]:
         """
-        Añade un jugador al torneo.
-        Valida que el torneo exista, el jugador exista, esté activo y no esté ya inscrito.
+        Inscribe a un jugador en un torneo específico.
+        
+        Realiza validaciones críticas: existencia del torneo, existencia del jugador,
+        si el jugador está activo y si ya estaba inscrito previamente.
         """
         # Validar torneo
         tournament = self.get_by_id(db, tournament_id)
@@ -70,17 +93,29 @@ class TournamentsService:
         return player
 
     def get_participants(self, db: Session, tournament_id: int) -> List[Player]:
-        """Obtiene la lista de jugadores inscritos en un torneo."""
+        """
+        Obtiene la lista de los jugadores inscritos en un torneo particular.
+
+        :param db: Sesión de la base de datos.
+        :param tournament_id: Identificador del torneo.
+        :return: Lista de objetos Player que participan.
+        """
         return db.query(Player).join(TournamentPlayer).filter(TournamentPlayer.tournament_id == tournament_id).all()
 
     def generate_bracket(self, db: Session, tournament_id: int) -> List[Match]:
         """
-        Genera la primera ronda del torneo.
-        - Obtiene participantes
-        - Baraja aleatoriamente
-        - Rellena con BYEs hasta potencia de 2
-        - Crea matches iniciales
-        - Resuelve matches con BYE
+        Genera la estructura inicial (ronda 1) de un torneo KO.
+        
+        El proceso incluye:
+        1. Recuperar y barajar participantes de forma aleatoria.
+        2. Determinar la potencia de 2 superior para dimensionar el cuadro.
+        3. Crear los combates de la ronda 1.
+        4. Gestionar automáticamente los BYEs (jugadores sin oponente pasan a ronda 2).
+        5. Cambiar el estado del torneo a GENERATED.
+
+        :param db: Sesión de la base de datos.
+        :param tournament_id: ID del torneo a generar.
+        :return: Lista de combates de la primera ronda.
         """
         tournament = self.get_by_id(db, tournament_id)
         if not tournament:
@@ -135,7 +170,15 @@ class TournamentsService:
 
     def generate_next_round(self, db: Session, tournament_id: int) -> List[Match]:
         """
-        Genera la siguiente ronda basada en los ganadores de la actual.
+        Avanza el torneo creando los emparejamientos de la siguiente ronda.
+        
+        Valida que todos los combates de la ronda actual hayan sido resueltos.
+        Empareja a los ganadores según su posición en el cuadro. Si solo queda
+        un ganador, finaliza el torneo determinando al campeón.
+
+        :param db: Sesión de la base de datos.
+        :param tournament_id: ID del torneo.
+        :return: Lista de combates de la nueva ronda generada.
         """
         tournament = self.get_by_id(db, tournament_id)
         if not tournament:
@@ -195,5 +238,11 @@ class TournamentsService:
         return new_matches
 
     def get_bracket(self, db: Session, tournament_id: int) -> List[Match]:
-        """Obtiene todos los matches del torneo."""
+        """
+        Recupera todos los combates asociados a un torneo, ordenados para su visualización.
+
+        :param db: Sesión de la base de datos.
+        :param tournament_id: ID del torneo.
+        :return: Lista de objetos Match.
+        """
         return db.query(Match).filter(Match.tournament_id == tournament_id).order_by(Match.round, Match.position).all()
