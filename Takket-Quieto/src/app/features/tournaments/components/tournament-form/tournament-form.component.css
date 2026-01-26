@@ -1,10 +1,13 @@
 .form-container {
     max-width: 500px;
     margin: 40px auto;
-    padding: 20px;
-    border: 1px solid #eee;
+    padding: 2rem;
+    border: 3px solid #3a3a3a;
     border-radius: 8px;
-    background-color: #fff;
+    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .form-group {

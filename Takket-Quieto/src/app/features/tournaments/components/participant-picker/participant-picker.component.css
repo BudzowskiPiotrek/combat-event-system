@@ -2,7 +2,7 @@
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #fcfcfc;
+    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
 }
 
 .players-list {
@@ -11,7 +11,7 @@
     margin-bottom: 15px;
     border: 1px solid #eee;
     padding: 10px;
-    background: white;
+    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
 }
 
 .player-item {
