@@ -51,6 +51,7 @@ def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
         return service.create_player(db, player)
     except Exception as e:
         # Simplificacion para el ejercicio
+        print(f"ERROR creating player: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.put("/{player_id}", response_model=PlayerResponse)
@@ -63,10 +64,14 @@ def update_player(player_id: int, player: PlayerUpdate, db: Session = Depends(ge
     :param db: Sesión de base de datos inyectada.
     :return: Jugador actualizado o error 404.
     """
-    updated_player = service.update_player(db, player_id, player)
-    if updated_player is None:
-        raise HTTPException(status_code=404, detail="Player not found")
-    return updated_player
+    try:
+        updated_player = service.update_player(db, player_id, player)
+        if updated_player is None:
+            raise HTTPException(status_code=404, detail="Player not found")
+        return updated_player
+    except Exception as e:
+        print(f"ERROR updating player {player_id}: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.patch("/{player_id}/toggle", response_model=PlayerResponse)
 def toggle_player_status(player_id: int, db: Session = Depends(get_db)):

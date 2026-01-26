@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from ..core.db import get_db
-from ..schemas.tournament_schemas import TournamentResponse, TournamentCreate, ParticipantCreate
+from ..schemas.tournament_schemas import TournamentResponse, TournamentCreate, ParticipantCreate, TournamentUpdate
 from ..schemas.match_schemas import MatchResponse
 from ..schemas.player_schemas import PlayerResponse
 from ..services.tournaments_service import TournamentsService
@@ -52,6 +52,21 @@ def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db
         return service.create_tournament(db, tournament)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.put("/{tournament_id}", response_model=TournamentResponse)
+def update_tournament(tournament_id: int, tournament: TournamentUpdate, db: Session = Depends(get_db)):
+    """
+    Actualiza la información básica de un torneo.
+
+    :param tournament_id: ID del torneo a actualizar.
+    :param tournament: Esquema con los nuevos datos.
+    :param db: Sesión de base de datos inyectada.
+    :return: Torneo actualizado o error 404.
+    """
+    updated_tournament = service.update_tournament(db, tournament_id, tournament)
+    if updated_tournament is None:
+        raise HTTPException(status_code=404, detail="Tournament not found")
+    return updated_tournament
 
 @router.post("/{tournament_id}/participants", response_model=PlayerResponse)
 def add_participant(tournament_id: int, participant: ParticipantCreate, db: Session = Depends(get_db)):

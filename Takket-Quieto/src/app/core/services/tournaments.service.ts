@@ -31,6 +31,15 @@ export class TournamentsService {
     }
 
     /**
+     * Actualiza los datos de un torneo.
+     * @param tournament Datos del torneo a actualizar
+     */
+    update(tournament: Partial<Tournament>): Observable<Tournament> {
+        const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.tournaments}/${tournament.id}`;
+        return this.http.put<Tournament>(url, tournament);
+    }
+
+    /**
      * Obtiene los detalles de un torneo.
      * @param id ID del torneo
      */

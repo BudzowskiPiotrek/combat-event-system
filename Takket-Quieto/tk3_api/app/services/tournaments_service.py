@@ -4,7 +4,7 @@ from ..models.tournament import Tournament, TournamentStatus
 from ..models.tournament_player import TournamentPlayer
 from ..models.player import Player
 from ..models.match import Match, MatchStatus
-from ..schemas.tournament_schemas import TournamentCreate, ParticipantCreate
+from ..schemas.tournament_schemas import TournamentCreate, ParticipantCreate, TournamentUpdate
 import math
 import random
 
@@ -49,6 +49,26 @@ class TournamentsService:
             status=TournamentStatus.DRAFT
         )
         db.add(db_tournament)
+        db.commit()
+        db.refresh(db_tournament)
+        return db_tournament
+
+    def update_tournament(self, db: Session, tournament_id: int, tournament_update: TournamentUpdate) -> Optional[Tournament]:
+        """
+        Actualiza los datos básicos de un torneo.
+
+        :param db: Sesión de la base de datos.
+        :param tournament_id: ID del torneo a actualizar.
+        :param tournament_update: Datos a actualizar.
+        :return: El torneo actualizado o None si no se encontró.
+        """
+        db_tournament = self.get_by_id(db, tournament_id)
+        if not db_tournament:
+            return None
+        
+        if tournament_update.name is not None:
+            db_tournament.name = tournament_update.name
+            
         db.commit()
         db.refresh(db_tournament)
         return db_tournament

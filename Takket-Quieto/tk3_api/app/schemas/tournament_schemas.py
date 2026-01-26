@@ -19,6 +19,10 @@ class TournamentCreate(TournamentBase):
     """Esquema para la creación de torneos."""
     pass
 
+class TournamentUpdate(TournamentBase):
+    """Esquema para la actualización de torneos."""
+    pass
+
 class TournamentResponse(TournamentBase):
     """Esquema de respuesta completo para la entidad Torneo."""
     id: int

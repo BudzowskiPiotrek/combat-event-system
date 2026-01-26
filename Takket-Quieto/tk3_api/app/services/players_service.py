@@ -33,12 +33,15 @@ class PlayersService:
     def create_player(self, db: Session, player: PlayerCreate) -> Player:
         """
         Registra un nuevo jugador en el sistema.
-
-        :param db: Sesión de la base de datos.
-        :param player: Datos del jugador a crear (según esquema PlayerCreate).
-        :return: El objeto Player recién creado y persistido.
+        Incluye un workaround para el error de duplicidad de ID 0 si el auto-incremento falla.
         """
+        # Obtenemos el ID mas alto actual para evitar el error 'Duplicate entry 0'
+        # si la tabla no tiene AUTO_INCREMENT configurado correctamente.
+        max_id = db.query(Player.id).order_by(Player.id.desc()).first()
+        next_id = (max_id[0] + 1) if max_id else 1
+
         db_player = Player(
+            id=next_id,
             nick=player.nick,
             logo_url=player.logo_url,
             active=player.active
