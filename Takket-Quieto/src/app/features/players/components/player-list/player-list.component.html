@@ -1,35 +1,34 @@
-<div class="player-list-container">
-    <table class="player-table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Logo</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let player of players">
-                <td>{{ player.nick }}</td>
-                <td>
-                    <img [src]="player.logoUrl" [alt]="player.nick" class="player-logo-small" *ngIf="player.logoUrl">
-                    <span *ngIf="!player.logoUrl">-</span>
-                </td>
-                <td>
-                    <span class="status-badge" [class.active]="player.active">
-                        {{ player.active ? 'Activo' : 'Inactivo' }}
-                    </span>
-                </td>
-                <td class="actions-cell">
-                    <button class="btn-icon" (click)="onEdit(player.id)">Editar</button>
-                    <!-- <button class="btn-icon btn-danger">Eliminar</button> -->
-                    <button class="btn-icon" (click)="onToggle(player.id)">{{ player.active ? 'Desactivar' : 'Activar'
-                        }}</button>
-                </td>
-            </tr>
-            <tr *ngIf="players.length === 0">
-                <td colspan="4" class="no-data">No hay jugadores</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="player-grid">
+    <div class="player-card" *ngFor="let player of players" [class.is-inactive]="!player.active">
+        <!-- Parte Superior: Logo -->
+        <div class="card-visual">
+            <div class="status-badge" [class.is-active]="player.active">
+                {{ player.active ? 'Activo' : 'Inactivo' }}
+            </div>
+            <img *ngIf="player.logoUrl" [src]="player.logoUrl" [alt]="player.nick" class="player-image" loading="lazy">
+            <div *ngIf="!player.logoUrl" class="player-placeholder">
+                <span>{{ player.nick.charAt(0).toUpperCase() }}</span>
+            </div>
+        </div>
+
+        <!-- Parte Central: Nick -->
+        <div class="card-content">
+            <h3 class="player-name">{{ player.nick }}</h3>
+        </div>
+
+        <!-- Parte Inferior: Acciones -->
+        <div class="card-footer">
+            <button class="btn-action btn-edit" (click)="onEdit(player.id)">
+                Editar
+            </button>
+            <button class="btn-action btn-toggle" [class.is-active]="player.active" (click)="onToggle(player.id)">
+                {{ player.active ? 'Desactivar' : 'Activar' }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="players.length === 0" class="empty-state">
+        <p>No hay jugadores registrados.</p>
+    </div>
 </div>
