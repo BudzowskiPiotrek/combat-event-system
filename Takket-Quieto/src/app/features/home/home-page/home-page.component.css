@@ -27,7 +27,7 @@
 }
 
 .main-logo:hover {
-    transform: scale(1.05);
+    transform: scale(1.15);
     box-shadow:
         0 0 30px rgba(255, 215, 0, 0.6),
         0 12px 40px rgba(0, 0, 0, 0.9);
