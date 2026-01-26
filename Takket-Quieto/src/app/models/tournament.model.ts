@@ -1,6 +1,7 @@
 export enum TournamentStatus {
     DRAFT = 'DRAFT',
-    GENERATED = 'GENERATED'
+    GENERATED = 'GENERATED',
+    FINISHED = 'FINISHED'
 }
 
 export interface Tournament {
@@ -8,4 +9,5 @@ export interface Tournament {
     name: string;
     status: TournamentStatus;
     created_at: string;
+    winner_id?: number | null;
 }

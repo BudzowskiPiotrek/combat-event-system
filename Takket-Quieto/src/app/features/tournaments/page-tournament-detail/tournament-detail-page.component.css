@@ -31,14 +31,13 @@
 
 .content-grid {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 350px 1fr;
     gap: 30px;
 }
 
 .participants-section h3,
-.bracket-placeholder h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
+.bracket-section h3 {
+    margin: 0;
 }
 
 .participants-controls {

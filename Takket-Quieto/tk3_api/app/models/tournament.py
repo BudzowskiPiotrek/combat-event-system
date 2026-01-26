@@ -6,6 +6,7 @@ from ..core.db import Base
 class TournamentStatus(str, enum.Enum):
     DRAFT = "DRAFT"
     GENERATED = "GENERATED"
+    FINISHED = "FINISHED"
 
 class Tournament(Base):
     """
@@ -18,3 +19,4 @@ class Tournament(Base):
     name = Column(String(100), nullable=False)
     status = Column(Enum(TournamentStatus), default=TournamentStatus.DRAFT, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    winner_id = Column(Integer, nullable=True)

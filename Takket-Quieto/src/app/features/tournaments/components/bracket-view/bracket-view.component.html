@@ -1,0 +1,7 @@
+<div class="bracket-wrapper">
+    <div class="bracket-container">
+        <app-round-column *ngFor="let r of rounds" [roundNumber]="r" [matches]="getMatchesByRound(r)"
+            [participants]="participants" (winnerSelected)="onWinnerSelected($event)">
+        </app-round-column>
+    </div>
+</div>

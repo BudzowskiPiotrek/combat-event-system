@@ -4,6 +4,7 @@ from typing import List
 
 from ..core.db import get_db
 from ..schemas.tournament_schemas import TournamentResponse, TournamentCreate, ParticipantCreate
+from ..schemas.match_schemas import MatchResponse
 from ..schemas.player_schemas import PlayerResponse
 from ..services.tournaments_service import TournamentsService
 
@@ -57,3 +58,30 @@ def read_participants(tournament_id: int, db: Session = Depends(get_db)):
     Listar participantes de un torneo.
     """
     return service.get_participants(db, tournament_id)
+
+@router.post("/{tournament_id}/generate", response_model=List[MatchResponse])
+def generate_bracket(tournament_id: int, db: Session = Depends(get_db)):
+    """
+    Generar la primera ronda del torneo.
+    """
+    try:
+        return service.generate_bracket(db, tournament_id)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/{tournament_id}/next-round", response_model=List[MatchResponse])
+def generate_next_round(tournament_id: int, db: Session = Depends(get_db)):
+    """
+    Generar la siguiente ronda del torneo.
+    """
+    try:
+        return service.generate_next_round(db, tournament_id)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/{tournament_id}/bracket", response_model=List[MatchResponse])
+def read_bracket(tournament_id: int, db: Session = Depends(get_db)):
+    """
+    Obtener todos los matches del torneo.
+    """
+    return service.get_bracket(db, tournament_id)

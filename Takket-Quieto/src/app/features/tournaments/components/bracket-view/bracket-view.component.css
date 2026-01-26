@@ -1,0 +1,29 @@
+.bracket-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #ffd700 rgba(255, 255, 255, 0.1);
+}
+
+.bracket-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    min-width: max-content;
+}
+
+/* Estilos para el scrollbar en Chrome/Safari */
+.bracket-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.bracket-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.bracket-wrapper::-webkit-scrollbar-thumb {
+    background: #ffd700;
+    border-radius: 4px;
+}

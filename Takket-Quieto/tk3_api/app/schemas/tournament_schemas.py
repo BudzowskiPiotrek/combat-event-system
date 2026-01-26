@@ -6,6 +6,7 @@ from enum import Enum
 class TournamentStatus(str, Enum):
     DRAFT = "DRAFT"
     GENERATED = "GENERATED"
+    FINISHED = "FINISHED"
 
 class TournamentBase(BaseModel):
     name: str
@@ -17,6 +18,7 @@ class TournamentResponse(TournamentBase):
     id: int
     status: TournamentStatus
     created_at: datetime
+    winner_id: Optional[int] = None
 
     class Config:
         from_attributes = True

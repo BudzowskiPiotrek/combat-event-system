@@ -1,11 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .core.db import engine, Base
-from .models.tournament_player import TournamentPlayer
-from .routers import players_router, tournaments_router
+from .routers import players_router, tournaments_router, matches_router
 
-# Crear tablas en BD (solo para desarrollo inicial, luego usar migraciones)
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Takket-Quieto API",
@@ -16,6 +13,7 @@ app = FastAPI(
 # Configurar CORS
 origins = [
     "http://localhost:4200",
+    "http://127.0.0.1:4200",
 ]
 
 app.add_middleware(
@@ -29,6 +27,7 @@ app.add_middleware(
 # Incluir routers
 app.include_router(players_router.router)
 app.include_router(tournaments_router.router)
+app.include_router(matches_router.router)
 
 
 @app.get("/")

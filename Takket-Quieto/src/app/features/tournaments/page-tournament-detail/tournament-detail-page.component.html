@@ -32,12 +32,40 @@
             </ng-template>
         </section>
 
-        <section class="bracket-placeholder">
-            <h3>Cuadro del Torneo</h3>
-            <div class="placeholder-box">
-                Espacio preparado para la generación de brackets.
-                <p>(Estará disponible en el próximo sprint)</p>
+        <section class="bracket-section">
+            <div class="section-header">
+                <h3>Cuadro del Torneo</h3>
+                <div class="actions" *ngIf="tournament.status !== TournamentStatus.FINISHED">
+                    <button *ngIf="tournament.status === TournamentStatus.DRAFT" class="btn-primary"
+                        (click)="generateBracket()" [disabled]="participants.length < 2">
+                        Generar Bracket
+                    </button>
+                    <button *ngIf="isNextRoundAvailable" class="btn-primary" (click)="generateNextRound()">
+                        Generar Siguiente Ronda
+                    </button>
+                </div>
             </div>
+
+            <div *ngIf="tournament.status === TournamentStatus.FINISHED" class="champion-banner">
+                <div class="champion-content">
+                    <span class="label">¡CAMPEÓN!</span>
+                    <h2>{{ winner?.nick }}</h2>
+                    <span class="trophy">🏆</span>
+                </div>
+            </div>
+
+            <div *ngIf="tournament.status !== TournamentStatus.DRAFT; else bracketPlaceholder"
+                class="bracket-view-container">
+                <app-bracket-view [matches]="matches" [participants]="participants"
+                    (winnerSelected)="onWinnerSelected($event)">
+                </app-bracket-view>
+            </div>
+
+            <ng-template #bracketPlaceholder>
+                <div class="placeholder-box">
+                    Añade al menos 2 participantes para generar el bracket.
+                </div>
+            </ng-template>
         </section>
     </div>
 </div>

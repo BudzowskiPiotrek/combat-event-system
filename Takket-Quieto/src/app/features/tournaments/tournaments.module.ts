@@ -7,13 +7,19 @@ import { TournamentsPageComponent } from './page-tournaments/tournaments-page.co
 import { TournamentFormComponent } from './components/tournament-form/tournament-form.component';
 import { TournamentDetailPageComponent } from './page-tournament-detail/tournament-detail-page.component';
 import { ParticipantPickerComponent } from './components/participant-picker/participant-picker.component';
+import { BracketViewComponent } from './components/bracket-view/bracket-view.component';
+import { RoundColumnComponent } from './components/round-column/round-column.component';
+import { MatchCardComponent } from './components/match-card/match-card.component';
 
 @NgModule({
     declarations: [
         TournamentsPageComponent,
         TournamentFormComponent,
         TournamentDetailPageComponent,
-        ParticipantPickerComponent
+        ParticipantPickerComponent,
+        BracketViewComponent,
+        RoundColumnComponent,
+        MatchCardComponent
     ],
     imports: [
         CommonModule,

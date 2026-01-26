@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { API_CONFIG } from '../api/api.config';
 import { Tournament } from '../../models/tournament.model';
 import { Player } from '../../models/player.model';
+import { Match } from '../../models/match.model';
 
 @Injectable({
     providedIn: 'root'
@@ -55,5 +56,32 @@ export class TournamentsService {
     addParticipant(tournamentId: number, playerId: number): Observable<Player> {
         const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.tournaments}/${tournamentId}/participants`;
         return this.http.post<Player>(url, { player_id: playerId });
+    }
+
+    /**
+     * Genera la primera ronda del torneo.
+     * @param id ID del torneo
+     */
+    generateBracket(id: number): Observable<Match[]> {
+        const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.tournaments}/${id}/generate`;
+        return this.http.post<Match[]>(url, {});
+    }
+
+    /**
+     * Genera la siguiente ronda del torneo.
+     * @param id ID del torneo
+     */
+    generateNextRound(id: number): Observable<Match[]> {
+        const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.tournaments}/${id}/next-round`;
+        return this.http.post<Match[]>(url, {});
+    }
+
+    /**
+     * Obtiene el bracket de un torneo.
+     * @param id ID del torneo
+     */
+    getBracket(id: number): Observable<Match[]> {
+        const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.tournaments}/${id}/bracket`;
+        return this.http.get<Match[]>(url);
     }
 }

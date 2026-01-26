@@ -1,0 +1,8 @@
+<div class="round-column">
+    <h4 class="round-title">{{ roundName }}</h4>
+    <div class="matches-container">
+        <app-match-card *ngFor="let m of matches" [match]="m" [participants]="participants"
+            (winnerSelected)="onWinnerSelected(m.id, $event)">
+        </app-match-card>
+    </div>
+</div>
