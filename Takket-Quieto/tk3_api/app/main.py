@@ -7,7 +7,7 @@ la ruta raíz informativa.
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import players_router, tournaments_router, matches_router
+from .routers import players_router, tournaments_router, matches_router, reports_router
 
 
 app = FastAPI(
@@ -34,6 +34,7 @@ app.add_middleware(
 app.include_router(players_router.router)
 app.include_router(tournaments_router.router)
 app.include_router(matches_router.router)
+app.include_router(reports_router.router)
 
 
 @app.get("/")
