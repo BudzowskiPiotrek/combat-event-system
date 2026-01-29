@@ -2,10 +2,11 @@ from sqlalchemy.orm import Session
 from typing import Optional
 from ..models.match import Match, MatchStatus
 
+
 class MatchesService:
     """
     Servicio encargado de la lógica de negocio de los combates (matches).
-    
+
     Gestiona la recuperación de información de enfrentamientos individuales
     y el registro oficial de resultados y ganadores.
     """
@@ -23,7 +24,7 @@ class MatchesService:
     def set_winner(self, db: Session, match_id: int, winner_id: int) -> Match:
         """
         Establece el ganador de un combate y actualiza su estado.
-        
+
         Valida rigurosamente que:
         1. El combate exista.
         2. El combate no haya sido resuelto previamente.
@@ -46,7 +47,7 @@ class MatchesService:
 
         match.winner_id = winner_id
         match.status = MatchStatus.RESOLVED
-        
+
         db.commit()
         db.refresh(match)
         return match

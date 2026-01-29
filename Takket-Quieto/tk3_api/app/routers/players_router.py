@@ -6,12 +6,10 @@ from ..core.db import get_db
 from ..schemas.player_schemas import PlayerResponse, PlayerCreate, PlayerUpdate
 from ..services.players_service import PlayersService
 
-router = APIRouter(
-    prefix="/players",
-    tags=["players"]
-)
+router = APIRouter(prefix="/players", tags=["players"])
 
 service = PlayersService()
+
 
 @router.get("/", response_model=List[PlayerResponse])
 def read_players(db: Session = Depends(get_db)):
@@ -22,6 +20,7 @@ def read_players(db: Session = Depends(get_db)):
     :return: Lista de jugadores (esquema PlayerResponse).
     """
     return service.get_all(db)
+
 
 @router.get("/{player_id}", response_model=PlayerResponse)
 def read_player(player_id: int, db: Session = Depends(get_db)):
@@ -36,6 +35,7 @@ def read_player(player_id: int, db: Session = Depends(get_db)):
     if player is None:
         raise HTTPException(status_code=404, detail="Player not found")
     return player
+
 
 @router.post("/", response_model=PlayerResponse)
 def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
@@ -53,6 +53,7 @@ def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
         # Simplificacion para el ejercicio
         print(f"ERROR creating player: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.put("/{player_id}", response_model=PlayerResponse)
 def update_player(player_id: int, player: PlayerUpdate, db: Session = Depends(get_db)):
@@ -73,6 +74,7 @@ def update_player(player_id: int, player: PlayerUpdate, db: Session = Depends(ge
         print(f"ERROR updating player {player_id}: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.patch("/{player_id}/toggle", response_model=PlayerResponse)
 def toggle_player_status(player_id: int, db: Session = Depends(get_db)):
     """
@@ -87,4 +89,3 @@ def toggle_player_status(player_id: int, db: Session = Depends(get_db)):
     if updated_player is None:
         raise HTTPException(status_code=404, detail="Player not found")
     return updated_player
-

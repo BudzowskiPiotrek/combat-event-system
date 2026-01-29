@@ -8,6 +8,7 @@ el ranking global de jugadores y el historial de combates.
 Propósito académico: Separación clara entre modelos de base de datos
 y modelos de transferencia de datos (DTO pattern).
 """
+
 from pydantic import BaseModel
 from typing import Optional
 
@@ -15,17 +16,18 @@ from typing import Optional
 class LeaderboardEntry(BaseModel):
     """
     Representa una entrada en el ranking global de jugadores.
-    
+
     Contiene las estadísticas de un jugador basadas en sus participaciones
     en combates resueltos. Se utiliza para mostrar la tabla de clasificación
     general del sistema.
-    
+
     Atributos:
         player_id: Identificador único del jugador.
         nick: Nombre o apodo del jugador.
         wins: Número total de victorias (combates donde fue el ganador).
         losses: Número total de derrotas (combates donde participó pero no ganó).
     """
+
     player_id: int
     nick: str
     wins: int
@@ -33,16 +35,17 @@ class LeaderboardEntry(BaseModel):
 
     class Config:
         """Configuración para permitir la conversión desde objetos ORM."""
+
         from_attributes = True
 
 
 class MatchHistoryEntry(BaseModel):
     """
     Representa un combate en el historial de un torneo.
-    
+
     Contiene toda la información relevante de un enfrentamiento específico,
     incluyendo los participantes, el resultado y su ubicación en el cuadro.
-    
+
     Atributos:
         match_id: Identificador único del combate.
         round: Número de ronda del torneo (1 = primera ronda, etc.).
@@ -55,6 +58,7 @@ class MatchHistoryEntry(BaseModel):
         winner_nick: Nick del ganador (None si aún no está resuelto).
         status: Estado del combate (PENDING o RESOLVED).
     """
+
     match_id: int
     round: int
     position: int
@@ -68,4 +72,5 @@ class MatchHistoryEntry(BaseModel):
 
     class Config:
         """Configuración para permitir la conversión desde objetos ORM."""
+
         from_attributes = True

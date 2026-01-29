@@ -5,6 +5,7 @@ Este módulo configura la aplicación FastAPI, define el middleware de CORS,
 hace la inclusión de los routers de las distintas entidades y define
 la ruta raíz informativa.
 """
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import players_router, tournaments_router, matches_router, reports_router
@@ -13,7 +14,7 @@ from .routers import players_router, tournaments_router, matches_router, reports
 app = FastAPI(
     title="Takket-Quieto API",
     description="API REST para el proyecto Takket-Quieto",
-    version="0.1.0"
+    version="0.1.0",
 )
 
 # Configurar CORS

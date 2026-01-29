@@ -3,10 +3,11 @@ from sqlalchemy.orm import Session
 from ..models.player import Player
 from ..schemas.player_schemas import PlayerCreate, PlayerUpdate
 
+
 class PlayersService:
     """
     Servicio encargado de la lógica de negocio relacionada con los jugadores.
-    
+
     Proporciona métodos para la gestión integral de participantes, incluyendo
     su creación, recuperación, actualización y gestión de su estado de activación.
     """
@@ -41,17 +42,16 @@ class PlayersService:
         next_id = (max_id[0] + 1) if max_id else 1
 
         db_player = Player(
-            id=next_id,
-            nick=player.nick,
-            logo_url=player.logo_url,
-            active=player.active
+            id=next_id, nick=player.nick, logo_url=player.logo_url, active=player.active
         )
         db.add(db_player)
         db.commit()
         db.refresh(db_player)
         return db_player
 
-    def update_player(self, db: Session, player_id: int, player_update: PlayerUpdate) -> Optional[Player]:
+    def update_player(
+        self, db: Session, player_id: int, player_update: PlayerUpdate
+    ) -> Optional[Player]:
         """
         Actualiza la información de un jugador existente de forma parcial.
 
@@ -63,7 +63,7 @@ class PlayersService:
         db_player = self.get_by_id(db, player_id)
         if not db_player:
             return None
-        
+
         # Actualizamos solo los campos provistos
         if player_update.nick is not None:
             db_player.nick = player_update.nick
@@ -71,7 +71,7 @@ class PlayersService:
             db_player.logo_url = player_update.logo_url
         if player_update.active is not None:
             db_player.active = player_update.active
-            
+
         db.commit()
         db.refresh(db_player)
         return db_player
@@ -87,9 +87,8 @@ class PlayersService:
         db_player = self.get_by_id(db, player_id)
         if not db_player:
             return None
-            
+
         db_player.active = not db_player.active
         db.commit()
         db.refresh(db_player)
         return db_player
-
