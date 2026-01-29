@@ -11,5 +11,4 @@ import { Component } from '@angular/core';
     styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-    // Componente de presentacion, sin logica compleja
 }

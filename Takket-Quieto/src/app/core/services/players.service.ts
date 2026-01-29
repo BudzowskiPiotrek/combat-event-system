@@ -7,12 +7,22 @@ import { Player } from '../../models/player.model';
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * Servicio de gestión de jugadores.
+ * 
+ * Maneja la comunicación con el backend para operaciones CRUD de jugadores,
+ * transformando automáticamente entre el formato snake_case del backend
+ * y camelCase del frontend.
+ */
 export class PlayersService {
 
     constructor(private http: HttpClient) { }
 
     /**
-     * Mapea un objeto del backend (snake_case) al frontend (camelCase).
+     * Transforma un objeto del backend al modelo de dominio del frontend.
+     * 
+     * @param p Objeto sin procesar del backend en snake_case
+     * @returns Objeto jugador con propiedades en camelCase
      */
     private mapToFrontend(p: any): Player {
         return {
@@ -23,9 +33,6 @@ export class PlayersService {
         };
     }
 
-    /**
-     * Obtiene todos los jugadores del backend.
-     */
     getAll(): Observable<Player[]> {
         const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.players}`;
         return this.http.get<any[]>(url).pipe(
@@ -33,10 +40,6 @@ export class PlayersService {
         );
     }
 
-    /**
-     * Obtiene un jugador por su ID.
-     * @param id ID del jugador
-     */
     getById(id: number): Observable<Player> {
         const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.players}/${id}`;
         return this.http.get<any>(url).pipe(
@@ -44,14 +47,16 @@ export class PlayersService {
         );
     }
 
-
     /**
-     * Crea un nuevo jugador.
+     * Crea un nuevo jugador con valores por defecto.
+     * 
+     * Si no se proporciona logoUrl, se envía un string vacío al backend.
+     * El campo active defaults a true si no se especifica.
+     * 
      * @param player Datos del jugador a crear
      */
     create(player: any): Observable<Player> {
         const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.players}`;
-        // Mapeo de camelCase a snake_case para el backend
         const body = {
             nick: player.nick,
             logo_url: player.logoUrl || '',
@@ -62,13 +67,8 @@ export class PlayersService {
         );
     }
 
-    /**
-     * Actualiza los datos básicos de un jugador.
-     * @param player Jugador con datos actualizados
-     */
     update(player: any): Observable<Player> {
         const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.players}/${player.id}`;
-        // Mapeo de camelCase a snake_case para el backend
         const body = {
             nick: player.nick,
             logo_url: player.logoUrl,
@@ -80,8 +80,11 @@ export class PlayersService {
     }
 
     /**
-     * Cambia el estado activo/inactivo de un jugador.
-     * @param id ID del jugador
+     * Alterna el estado activo/inactivo de un jugador en el backend.
+     * 
+     * El backend es responsable de calcular el nuevo estado.
+     * 
+     * @param id Identificador único del jugador
      */
     toggleActive(id: number): Observable<Player> {
         const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.players}/${id}/toggle`;
