@@ -66,7 +66,8 @@ export class HistoryComponent implements OnInit {
                 this.participants = players;
                 this.reportsService.getTournamentMatches(id).subscribe({
                     next: (matches) => {
-                        this.matches = matches;
+                        // Filter out matches where BOTH players are null (BYE vs BYE)
+                        this.matches = matches.filter(m => m.player1_id !== null || m.player2_id !== null);
                         this.loading = false;
                     },
                     error: (err) => {
