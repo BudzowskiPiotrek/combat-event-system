@@ -1,0 +1,48 @@
+<div class="reports-container">
+    <h2>📜 Historial de Combates</h2>
+
+    <div class="controls">
+        <label for="tournamentSelect">Seleccionar Torneo:</label>
+        <select id="tournamentSelect" (change)="onTournamentChange($event)" [disabled]="loading">
+            <option value="">-- Seleccione un torneo --</option>
+            <option *ngFor="let t of tournaments" [value]="t.id">
+                {{ t.name }}
+            </option>
+        </select>
+    </div>
+
+    <div *ngIf="loading" class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error && selectedTournamentId && matches.length > 0" class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Ronda</th>
+                    <th>Jugador 1</th>
+                    <th>Jugador 2</th>
+                    <th>Ganador</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let match of matches">
+                    <td>{{ match.round }}</td>
+                    <td>{{ getPlayerName(match.player1_id) }}</td>
+                    <td>{{ getPlayerName(match.player2_id) }}</td>
+                    <td [class.winner-text]="match.status === 'RESOLVED'">
+                        {{ getWinnerName(match) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="!loading && selectedTournamentId && matches.length === 0" class="empty-state">
+        <p>No hay combates registrados para este torneo.</p>
+    </div>
+</div>

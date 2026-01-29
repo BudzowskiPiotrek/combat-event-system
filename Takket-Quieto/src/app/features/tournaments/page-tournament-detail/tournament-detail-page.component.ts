@@ -65,9 +65,35 @@ export class TournamentDetailPageComponent implements OnInit {
         this.tournamentsService.getBracket(id).subscribe({
             next: (data: Match[]) => {
                 this.matches = data;
+                this.checkAndResolveByes();
             },
             error: (err: any) => console.error('Error loading bracket:', err)
         });
+    }
+
+    private checkAndResolveByes(): void {
+        const byeMatches = this.matches.filter(m =>
+            m.status === MatchStatus.PENDING &&
+            m.player1_id &&
+            !m.player2_id
+        );
+
+        if (byeMatches.length > 0) {
+            byeMatches.forEach(match => {
+                if (match.player1_id) {
+                    this.matchesService.setWinner(match.id, match.player1_id).subscribe({
+                        next: () => {
+                            console.log(`Auto-resolved BYE match ${match.id}`);
+                            // Reload data to reflect changes
+                            if (this.tournament) {
+                                this.loadBracket(this.tournament.id);
+                            }
+                        },
+                        error: (err) => console.error(`Error auto-resolving BYE for match ${match.id}`, err)
+                    });
+                }
+            });
+        }
     }
 
     generateBracket(): void {
@@ -96,9 +122,16 @@ export class TournamentDetailPageComponent implements OnInit {
 
     get isNextRoundAvailable(): boolean {
         if (!this.tournament || this.matches.length === 0) return false;
+
         const lastRound = Math.max(...this.matches.map(m => m.round));
         const currentRoundMatches = this.matches.filter(m => m.round === lastRound);
-        return currentRoundMatches.every(m => m.status === MatchStatus.RESOLVED) && currentRoundMatches.length > 1;
+
+        // Solo validamos los combates que REALMENTE tienen participantes.
+        // Si un combate es TBD vs TBD, no debería bloquear el avance si el resto están listos.
+        return currentRoundMatches.every(m => {
+            const isGhostMatch = (m.player1_id === null && m.player2_id === null);
+            return m.status === MatchStatus.RESOLVED || isGhostMatch;
+        }) && currentRoundMatches.length > 0;
     }
 
     get winner(): Player | undefined {

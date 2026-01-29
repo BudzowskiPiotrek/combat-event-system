@@ -188,6 +188,9 @@ class TournamentsService:
             status = MatchStatus.PENDING
             winner_id = None
 
+            if p1 is None and p2 is None:
+                status = MatchStatus.RESOLVED
+
             if p1 and not p2:  # BYE
                 status = MatchStatus.RESOLVED
                 winner_id = p1.id
@@ -209,22 +212,10 @@ class TournamentsService:
         return matches
 
     def generate_next_round(self, db: Session, tournament_id: int) -> List[Match]:
-        """
-        Avanza el torneo creando los emparejamientos de la siguiente ronda.
-
-        Valida que todos los combates de la ronda actual hayan sido resueltos.
-        Empareja a los ganadores según su posición en el cuadro. Si solo queda
-        un ganador, finaliza el torneo determinando al campeón.
-
-        :param db: Sesión de la base de datos.
-        :param tournament_id: ID del torneo.
-        :return: Lista de combates de la nueva ronda generada.
-        """
         tournament = self.get_by_id(db, tournament_id)
         if not tournament:
             raise Exception("Tournament not found")
 
-        # Buscar última ronda
         last_match = (
             db.query(Match)
             .filter(Match.tournament_id == tournament_id)
@@ -236,7 +227,7 @@ class TournamentsService:
 
         current_round = last_match.round
 
-        # Verificar que todos los matches de la ronda actual estén resueltos
+        # 1. Validación estricta de pendientes
         pending = (
             db.query(Match)
             .filter(
@@ -246,43 +237,60 @@ class TournamentsService:
             )
             .count()
         )
-
         if pending > 0:
-            raise Exception(
-                f"Cannot progress: there are {pending} pending matches in round {current_round}"
-            )
+            raise Exception(f"Cannot progress: there are {pending} pending matches")
 
-        # Obtener ganadores de la ronda actual ordenados por posición
-        winners = (
+        # 2. Obtener los resultados de la ronda actual
+        results = (
             db.query(Match)
             .filter(Match.tournament_id == tournament_id, Match.round == current_round)
             .order_by(Match.position)
             .all()
         )
 
-        if len(winners) == 1:
-            # Ya tenemos un campeón
+        # Si solo hubo un combate en esta ronda, ya terminó
+        if len(results) == 1:
             tournament.status = TournamentStatus.FINISHED
-            tournament.winner_id = winners[0].winner_id
+            tournament.winner_id = results[0].winner_id
             db.commit()
             return []
 
-        # Crear nueva ronda
         new_matches = []
         next_round = current_round + 1
-        num_new_matches = len(winners) // 2
+        
+        # 3. La clave: La siguiente ronda siempre tiene la mitad de combates
+        num_new_matches = len(results) // 2
 
         for i in range(num_new_matches):
-            w1 = winners[i * 2]
-            w2 = winners[i * 2 + 1]
+            # Emparejamos los ganadores de los combates (i*2) e (i*2 + 1)
+            # Nota: winner_id puede ser None si era un combate vacío
+            w1_id = results[i * 2].winner_id
+            w2_id = results[i * 2 + 1].winner_id
+
+            status = MatchStatus.PENDING
+            winner_id = None
+
+            # 4. Lógica de propagación de BYEs / Combates vacíos
+            # Si no hay nadie en ninguno de los dos combates previos
+            if not w1_id and not w2_id:
+                status = MatchStatus.RESOLVED
+                winner_id = None
+            # Si solo llega uno (BYE en ronda intermedia)
+            elif w1_id and not w2_id:
+                status = MatchStatus.RESOLVED
+                winner_id = w1_id
+            elif w2_id and not w1_id:
+                status = MatchStatus.RESOLVED
+                winner_id = w2_id
 
             db_match = Match(
                 tournament_id=tournament_id,
                 round=next_round,
                 position=i + 1,
-                player1_id=w1.winner_id,
-                player2_id=w2.winner_id,
-                status=MatchStatus.PENDING,
+                player1_id=w1_id,
+                player2_id=w2_id,
+                winner_id=winner_id,
+                status=status,
             )
             db.add(db_match)
             new_matches.append(db_match)

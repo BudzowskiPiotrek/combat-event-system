@@ -1,0 +1,100 @@
+.reports-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    min-width: 250px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+}
+
+.data-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.empty-state {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+    margin-top: 20px;
+}
+
+.winner-text {
+    color: #28a745;
+    font-weight: bold;
+}
