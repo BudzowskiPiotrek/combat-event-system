@@ -5,24 +5,22 @@
     </div>
 
     <div class="players">
-        <div class="player-slot" 
-             [class.winner]="isWinner(match.player1_id)"
-             [class.clickable]="match.status === 'PENDING' && match.player1_id && match.player2_id"
-             (click)="selectWinner(match.player1_id)">
+        <div class="player-slot" [class.winner]="isWinner(match.player1_id)"
+            [class.clickable]="match.status === 'PENDING' && match.player1_id && match.player2_id"
+            (click)="selectWinner(match.player1_id)">
             <span class="nick">{{ getPlayerNick(match.player1_id) }}</span>
             <span *ngIf="isWinner(match.player1_id)" class="crown">👑</span>
         </div>
 
         <div class="separator">VS</div>
 
-        <div class="player-slot" 
-             [class.winner]="isWinner(match.player2_id)"
-             [class.clickable]="match.status === 'PENDING' && match.player1_id && match.player2_id"
-             (click)="selectWinner(match.player2_id)">
+        <div class="player-slot" [class.winner]="isWinner(match.player2_id)"
+            [class.clickable]="match.status === 'PENDING' && match.player1_id && match.player2_id"
+            (click)="selectWinner(match.player2_id)">
             <span class="nick">{{ getPlayerNick(match.player2_id) }}</span>
             <span *ngIf="isWinner(match.player2_id)" class="crown">👑</span>
         </div>
     </div>
-    
+
     <div *ngIf="isBye" class="bye-badge">PASÓ POR BYE</div>
 </div>

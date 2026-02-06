@@ -70,6 +70,18 @@ export class TournamentDetailPageComponent implements OnInit {
             error: (err: any) => console.error('Error loading bracket:', err)
         });
     }
+    
+    get isNextRoundAvailable(): boolean {
+        if (!this.tournament || this.matches.length === 0) return false;
+
+        const lastRound = Math.max(...this.matches.map(m => m.round));
+        const currentRoundMatches = this.matches.filter(m => m.round === lastRound);
+
+        return currentRoundMatches.every(m => {
+            const isGhostMatch = (m.player1_id === null && m.player2_id === null);
+            return m.status === MatchStatus.RESOLVED || isGhostMatch;
+        }) && currentRoundMatches.length > 0;
+    }
 
     private checkAndResolveByes(): void {
         const byeMatches = this.matches.filter(m =>
@@ -120,19 +132,7 @@ export class TournamentDetailPageComponent implements OnInit {
         });
     }
 
-    get isNextRoundAvailable(): boolean {
-        if (!this.tournament || this.matches.length === 0) return false;
 
-        const lastRound = Math.max(...this.matches.map(m => m.round));
-        const currentRoundMatches = this.matches.filter(m => m.round === lastRound);
-
-        // Solo validamos los combates que REALMENTE tienen participantes.
-        // Si un combate es TBD vs TBD, no debería bloquear el avance si el resto están listos.
-        return currentRoundMatches.every(m => {
-            const isGhostMatch = (m.player1_id === null && m.player2_id === null);
-            return m.status === MatchStatus.RESOLVED || isGhostMatch;
-        }) && currentRoundMatches.length > 0;
-    }
 
     get winner(): Player | undefined {
         if (!this.tournament || !this.tournament.winner_id) return undefined;
